@@ -1,1 +1,0 @@
-# Earning Call Analysis Report
