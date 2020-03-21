@@ -1,5 +1,5 @@
 # Earning-Call-Analysis
-Analyzes earning calls and stock prices
+Analyzes earning calls and stock prices. Uses NLP, Sentiment Analysis, ggplot2, and interacts with alpha vantage API
 
 ### Libraries Used in This Project:
 
