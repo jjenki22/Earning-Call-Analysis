@@ -202,7 +202,7 @@ ggplot(wwe2_sentiment, aes(x=category, y = meanSentiment)) +
        y="Mean Sentiment")
 ```
 
-<img src="Images/Mean_Sentiment_vs_Title_Catgeory_Call_Date.png">
+<img src="Images/Mean_Sentiment_vs_Title_Category_Call_Date.png">
 
 When you look at these plots, a few things stand out. One, executives always have a positive sentiment value. This makes sense because, as mentioned above, executives are generally extremely positive about their companies because they hope to have a positive influence on Analysts and those listening on the call and thus drive the price higher. Next, analysts and the category others have fluctuating sentiment values. This makes sense because both categories react to the performance of the company. If the company did something, positive analysts would be optimistic. On the flip side, if the company did something negative, analysts will be pessimistic. The same can be said for the category "Other." If the company or a division in the company did something positive, the media and other members of the company would be positive. However, if the company or division in the company did something negative, the media and junior members of the company will be negative.
 
