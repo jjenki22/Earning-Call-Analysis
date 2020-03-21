@@ -307,7 +307,7 @@ ggplot(group_sentiment2, aes(y = Close_Mean_Pct, x = index)) +
        y="Mean Percent Price Change")
 ```
 
-<img src="Images/Mean_Price_cahnge_5_Days_Before_After_Call.png">
+<img src="Images/Mean_Price_Change_5_Days_Before_After_Call.png">
 
 ```{r}
 group_sentiment %>% 
@@ -318,7 +318,7 @@ group_sentiment %>%
   labs(title = "Mean Price Change for Negative Sentiment")
 ```
 
-<img src="Images/Negative_Sentiment.png">
+<img src="Images/Negtaive_Sentiment.png">
 
 ```{r}
 group_sentiment %>% 
@@ -525,7 +525,7 @@ ggplot(all_stock_group_sentiment2, aes(y = Close_Mean_Pct, x = index)) +
        y="Mean Percent Price Change")
 ```
 
-<img src="Images/Mean_Price_Change_5_Days_Before_After__Call_Additional_Info.png">
+<img src="Images/Mean_Price_Change_5_Days_Before_After_Call_Additional_Info.png">
 
 ```{r}
 all_stock_group_sentiment %>% 
