@@ -556,3 +556,4 @@ all_stock_group_sentiment %>%
 <img src="Images/Positive_Sentiment_Additional_Info.png">
 
 The results above show that adding the two new dates does not change the results significantly. While the bars change slightly, on the whole, the graphs look very similar to the ones in silver.
+
