@@ -49,6 +49,7 @@ ggplot(wwe, aes(x=likelyRace)) +
   theme_classic() +
   labs(title="Likley Race", x = "Likely Race", y = "Count")
 ```
+# Likley_Race.png
 
 After looking at the initial data structure of the data, a few things stand out:
 
@@ -69,8 +70,11 @@ wwe2$name <- str_squish(wwe2$name)
 
 wwe2 <- wwe2 %>% 
   filter(name !="operator")
+```
 
-# Cleaning More
+#### Cleaning Data:
+
+```{r}
 wwe2 <- wwe2 %>% 
   filter(text != "Okay.") %>% 
   filter(text != "Okay. Thank you.") %>% 
@@ -121,9 +125,7 @@ wwe2 <- wwe2 %>%
   filter(!str_detect(text, "^Got(.*)\\.$")) %>% 
   filter(!str_detect(text, "^Thank(.*) guys\\.$")) %>% 
   filter(!str_detect(text, "^Definitely(.*) you\\.$")) %>% 
-  filter(!str_detect(text, "^Okay(.*) thank you\\."))
-
-# Analyzing 
+  filter(!str_detect(text, "^Okay(.*) thank you\\.")) 
 wwe2$title <- str_squish(wwe2$title)
 wwe2 <- wwe2 %>% 
   filter(title != "- I think it was -- it's Taj, it used to be Taj, but it's -- is the network. They are -- I think it is our second or third highest paid television deal. They run our programming all the time.")
@@ -140,13 +142,18 @@ wwe2 <- mutate(wwe2, category =
           ifelse(grepl(".*Chief.*", wwe2$title), "Exec",
           ifelse(grepl(".*COO.*", wwe2$title), "Exec",
           ifelse(grepl(".*Chairman.*", wwe2$title), "Exec", "Other"))))))))
+```
 
-# Plots
+### Visualizations:
+
+```{r}
 ggplot(wwe2, aes(x=category)) +
   geom_bar() + 
   theme_classic() +
   labs(title="Title", x = "Job Title", y = "Count")
 ```
+
+# Job_Title.png
 
 ### Text Analysis:
 
@@ -181,6 +188,8 @@ wwe2_sentiment %>%
        xlabs = "Category", ylabs="Mean Sentiment")
 ```
 
+# Mean_Sentiment_Title_Category.png
+
 Based on initial analysis, Executives are often very positive about the company. This makes sense. Typically, executives are very positive about their companies. In addition, the analysts have a slightly lower mean sentiment, but it is still positive. Again this makes sense because typically Analysts who appear on earnings calls actively follow the company and thus may be excited about the company. Finally, the category other is negative. Again, this is not surprising because that category is filled with people who are part of the media, vice presidents, and other members of the company. Thus these individuals typically appear on earnings calls when something bad happened. However, I was curious, so I decided to facet wrap the next plot to view the sentiment for each call.
 
 ```{r}
@@ -188,8 +197,12 @@ ggplot(wwe2_sentiment, aes(x=category, y = meanSentiment)) +
   geom_bar(stat="identity") +
   facet_wrap(~date) +
   theme_classic() +
-  labs(title = "Mean Sentiment vs. Title Category Grouped by Call Date")
+  labs(title = "Mean Sentiment vs. Title Category Grouped by Call Date",
+       x="Title Category", 
+       y="Mean Sentiment")
 ```
+
+# Mean_Sentiment_vs_Title_Catgeory_Call_Date.png
 
 When you look at these plots, a few things stand out. One, executives always have a positive sentiment value. This makes sense because, as mentioned above, executives are generally extremely positive about their companies because they hope to have a positive influence on Analysts and those listening on the call and thus drive the price higher. Next, analysts and the category others have fluctuating sentiment values. This makes sense because both categories react to the performance of the company. If the company did something, positive analysts would be optimistic. On the flip side, if the company did something negative, analysts will be pessimistic. The same can be said for the category "Other." If the company or a division in the company did something positive, the media and other members of the company would be positive. However, if the company or division in the company did something negative, the media and junior members of the company will be negative.
 
@@ -288,15 +301,26 @@ group_sentiment2 <- stock_sentiment %>%
 
 ggplot(group_sentiment2, aes(y = Close_Mean_Pct, x = index)) + 
   geom_bar(position="dodge", stat="identity") +
-  labs(title = "Mean Price Change for 5 Days Before/After Call")
+  theme_classic() +
+  labs(title = "Mean Price Change for 5 Days Before/After Call",
+       x="Days Before Earnings Call",
+       y="Mean Percent Price Change")
+```
 
+# Mean_Price_cahnge_5_Days_Before_After_Call.png
+
+```{r}
 group_sentiment %>% 
   filter(sentiment_positive_negative == 0) %>% 
   ggplot(., aes(y = Close_Mean_Pct, x = index)) + 
   facet_wrap(~category) +
   geom_bar(position="dodge", stat="identity") +
   labs(title = "Mean Price Change for Negative Sentiment")
+```
 
+# Negative_Sentiment.png
+
+```{r}
 group_sentiment %>% 
   filter(sentiment_positive_negative == 1) %>% 
   ggplot(., aes(y = Close_Mean_Pct, x = index)) + 
@@ -304,6 +328,8 @@ group_sentiment %>%
   geom_bar(position="dodge", stat="identity") +
   labs(title = "Mean Price Change for Positive Sentiment")
 ```
+
+# Positive_Sentiment.png
 
 After creating the plots, a few trends stand out. The first plot shows the average percentage change five days before the call and five days after the call. From this plot, it seems that there is an opportunity if you buy the stock at the closing time four days before the call and then sell the call two days after the call. However, other graphs provide more information.  
 
@@ -486,25 +512,47 @@ all_stock_group_sentiment <- all_stock %>%
 all_stock_group_sentiment2 <- all_stock %>% 
   group_by(index) %>% 
   summarise(Close_Mean_Pct = mean(Close_Pct_Change))
+```
 
-# Creating Plots
+### Visualizations:
+
+```{r}
 ggplot(all_stock_group_sentiment2, aes(y = Close_Mean_Pct, x = index)) + 
   geom_bar(position="dodge", stat="identity") +
-  labs(title = "Price of Stock 5 Days Before Call 5 Days After")
+  theme_classic() +
+  labs(title = "Mean Price Change for 5 Days Before/After",
+       x="Days Before Earnings Call",
+       y="Mean Percent Price Change")
+```
 
+# Mean_Price_Change_5_Days_Before_After__Call_Additional_Info.png
+
+```{r}
 all_stock_group_sentiment %>% 
   filter(sentiment_positive_negative == 0) %>% 
   ggplot(., aes(y = Close_Mean_Pct, x = index)) + 
   facet_wrap(~category) +
   geom_bar(position="dodge", stat="identity") +
-  labs(title = "Negative Sentiment")
+  theme_classic()+
+  labs(title = "Negative Sentiment",
+       x="Days Before/After Earnings Call",
+       y="Mean Percent Price Change")
+```
 
+# Negative_Sentiment_Additional_Info.png
+
+```{r}
 all_stock_group_sentiment %>% 
   filter(sentiment_positive_negative == 1) %>% 
   ggplot(., aes(y = Close_Mean_Pct, x = index)) + 
   facet_wrap(~category) +
+  theme_classic() +
   geom_bar(position="dodge", stat="identity") +
-  labs(title = "Positive Sentiment")
+  labs(title = "Positive Sentiment",
+       x="Days Before/After Earnings Call",
+       y="Mean Percent Price Chnage")
 ```
+
+# Positive_Sentiment_Additional_Info.png
 
 The results above show that adding the two new dates does not change the results significantly. While the bars change slightly, on the whole, the graphs look very similar to the ones in silver.
