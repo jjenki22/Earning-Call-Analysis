@@ -153,7 +153,7 @@ ggplot(wwe2, aes(x=category)) +
   labs(title="Title", x = "Job Title", y = "Count")
 ```
 
-# Job_Title.png
+<img src="Job_Title.png">
 
 ### Text Analysis:
 
@@ -188,7 +188,7 @@ wwe2_sentiment %>%
        xlabs = "Category", ylabs="Mean Sentiment")
 ```
 
-# Mean_Sentiment_Title_Category.png
+<img src="Mean_Sentiment_Title_Category.png">
 
 Based on initial analysis, Executives are often very positive about the company. This makes sense. Typically, executives are very positive about their companies. In addition, the analysts have a slightly lower mean sentiment, but it is still positive. Again this makes sense because typically Analysts who appear on earnings calls actively follow the company and thus may be excited about the company. Finally, the category other is negative. Again, this is not surprising because that category is filled with people who are part of the media, vice presidents, and other members of the company. Thus these individuals typically appear on earnings calls when something bad happened. However, I was curious, so I decided to facet wrap the next plot to view the sentiment for each call.
 
@@ -202,7 +202,7 @@ ggplot(wwe2_sentiment, aes(x=category, y = meanSentiment)) +
        y="Mean Sentiment")
 ```
 
-# Mean_Sentiment_vs_Title_Catgeory_Call_Date.png
+<img src="Mean_Sentiment_vs_Title_Catgeory_Call_Date.png">
 
 When you look at these plots, a few things stand out. One, executives always have a positive sentiment value. This makes sense because, as mentioned above, executives are generally extremely positive about their companies because they hope to have a positive influence on Analysts and those listening on the call and thus drive the price higher. Next, analysts and the category others have fluctuating sentiment values. This makes sense because both categories react to the performance of the company. If the company did something, positive analysts would be optimistic. On the flip side, if the company did something negative, analysts will be pessimistic. The same can be said for the category "Other." If the company or a division in the company did something positive, the media and other members of the company would be positive. However, if the company or division in the company did something negative, the media and junior members of the company will be negative.
 
@@ -307,7 +307,7 @@ ggplot(group_sentiment2, aes(y = Close_Mean_Pct, x = index)) +
        y="Mean Percent Price Change")
 ```
 
-# Mean_Price_cahnge_5_Days_Before_After_Call.png
+<img src="Mean_Price_cahnge_5_Days_Before_After_Call.png">
 
 ```{r}
 group_sentiment %>% 
@@ -318,7 +318,7 @@ group_sentiment %>%
   labs(title = "Mean Price Change for Negative Sentiment")
 ```
 
-# Negative_Sentiment.png
+<img src="Negative_Sentiment.png"
 
 ```{r}
 group_sentiment %>% 
@@ -329,7 +329,7 @@ group_sentiment %>%
   labs(title = "Mean Price Change for Positive Sentiment")
 ```
 
-# Positive_Sentiment.png
+<img src="Positive_Sentiment.png">
 
 After creating the plots, a few trends stand out. The first plot shows the average percentage change five days before the call and five days after the call. From this plot, it seems that there is an opportunity if you buy the stock at the closing time four days before the call and then sell the call two days after the call. However, other graphs provide more information.  
 
@@ -525,7 +525,7 @@ ggplot(all_stock_group_sentiment2, aes(y = Close_Mean_Pct, x = index)) +
        y="Mean Percent Price Change")
 ```
 
-# Mean_Price_Change_5_Days_Before_After__Call_Additional_Info.png
+<img src="Mean_Price_Change_5_Days_Before_After__Call_Additional_Info.png">
 
 ```{r}
 all_stock_group_sentiment %>% 
@@ -539,7 +539,7 @@ all_stock_group_sentiment %>%
        y="Mean Percent Price Change")
 ```
 
-# Negative_Sentiment_Additional_Info.png
+<img src="Negative_Sentiment_Additional_Info.png">
 
 ```{r}
 all_stock_group_sentiment %>% 
@@ -553,6 +553,6 @@ all_stock_group_sentiment %>%
        y="Mean Percent Price Chnage")
 ```
 
-# Positive_Sentiment_Additional_Info.png
+<img src="Positive_Sentiment_Additional_Info.png">
 
 The results above show that adding the two new dates does not change the results significantly. While the bars change slightly, on the whole, the graphs look very similar to the ones in silver.
