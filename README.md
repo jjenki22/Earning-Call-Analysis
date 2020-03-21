@@ -49,7 +49,7 @@ ggplot(wwe, aes(x=likelyRace)) +
   theme_classic() +
   labs(title="Likley Race", x = "Likely Race", y = "Count")
 ```
-# Likley_Race.png
+<img src="Images/Likley_Race.png">
 
 After looking at the initial data structure of the data, a few things stand out:
 
