@@ -3,7 +3,7 @@ Analyzes earning calls and stock prices. Uses NLP, Sentiment Analysis, ggplot2, 
 
 ### Libraries Used in This Project:
 
-```{r}
+```r
 library(dplyr)
 library(ggplot2)
 library(stringr)
@@ -22,14 +22,14 @@ The data used in this project were individual transcripts from WEE earning calls
 
 To import the data, first, I set the name of the folder I wanted to unzip, "wweCalls.zip" equal to the object named setwd. Next, I used the function unzip to unzip the file.
 
-```{r}
+```r
 setwd <- "wweCalls.zip"
 unzip(setwd, exdir = "Unzipped Data/")
 ```
 
 Next, I created an object named temp with the function list.files to get all of the names of the files within the folder "Predictive Analytics Homework 1" that followed the pattern of "wwe_parsed_(.*)" in their file names. After creating this list of characters, I then used lapply with read.csv to get all of the files into my environment. After doing this I used do.call to rbind all of the data frames because they were stored within a giant list of data frames.
 
-```{r}
+```r
 temp <- list.files(path = "/Users/joeyj/Desktop/Desktop/2020/Notre Dame/Quarter 3/Unstructured Data Analytics/Predictive Analytics Homework 1/", 
            pattern = "wwe_parsed_(.*)",
            full.names = FALSE)
@@ -41,7 +41,7 @@ wwe <- do.call(rbind, csv)
 
 After getting the data into my environment, I then created a plot to explore the data. 
 
-```{r}
+```r
 str(wwe)
 table(wwe$likelyRace)
 ggplot(wwe, aes(x=likelyRace)) +
@@ -63,7 +63,7 @@ After looking at the initial data structure of the data, a few things stand out:
 
 After reviewing the data, I believe that the main emphasis of data cleaning should be centered around the text. While there are no missing values, there are columns with text that only responses to what someone said. Due to this, I decided to remove entries that have comments such as "Thank you." or "Okay. Thank you." However, before I did this, I decided to use McDonald's stop word lists. In my analysis, I am going to remove words with his lists "StopWords_Names" and "StopWords_GenericLong." I also decided to remove comments and instances that involved the operator because I did not see the value that there comments added. 
 
-```{r}
+```r
 wwe2 <- wwe
 wwe2$text <- str_squish(wwe2$text)
 wwe2$name <- str_squish(wwe2$name)
@@ -74,7 +74,7 @@ wwe2 <- wwe2 %>%
 
 #### Cleaning Data:
 
-```{r}
+```r
 wwe2 <- wwe2 %>% 
   filter(text != "Okay.") %>% 
   filter(text != "Okay. Thank you.") %>% 
@@ -133,7 +133,7 @@ wwe2 <- wwe2 %>%
 
 After Analyzing the data, I decided to group the job titles into three bins (Exec, Analyst, and Other). The plot shows that the executives are the ones with most comments. This makes sense on an earnings call because typically, they are the ones who talk the most.
 
-```{r}
+```r
 wwe2 <- mutate(wwe2, category = 
           ifelse(grepl(".*CEO.*", wwe2$title), "Exec",
           ifelse(grepl(".*CFO.*", wwe2$title), "Exec",
@@ -146,7 +146,7 @@ wwe2 <- mutate(wwe2, category =
 
 ### Visualizations:
 
-```{r}
+```r
 ggplot(wwe2, aes(x=category)) +
   geom_bar() + 
   theme_classic() +
@@ -157,7 +157,7 @@ ggplot(wwe2, aes(x=category)) +
 
 ### Text Analysis:
 
-```{r}
+```r
 wwe2$date <- as.Date(wwe2$date, format = "%d-%b-%y")
 wwe2$date <- format(wwe2$date, "%Y-%m-%d")
 wwe2$category <- as.factor(wwe2$category)
@@ -177,7 +177,7 @@ I elected to use Loughran and Mcdonald lexicon for sentiment analysis because it
 
 After running my sentiment analysis, I decided to create a plot that analyzed the mean sentiment values for each title category. 
 
-```{r}
+```r
 wwe2_sentiment %>% 
   group_by(category) %>% 
   summarise(Mean = mean(meanSentiment)) %>% 
@@ -192,7 +192,7 @@ wwe2_sentiment %>%
 
 Based on initial analysis, Executives are often very positive about the company. This makes sense. Typically, executives are very positive about their companies. In addition, the analysts have a slightly lower mean sentiment, but it is still positive. Again this makes sense because typically Analysts who appear on earnings calls actively follow the company and thus may be excited about the company. Finally, the category other is negative. Again, this is not surprising because that category is filled with people who are part of the media, vice presidents, and other members of the company. Thus these individuals typically appear on earnings calls when something bad happened. However, I was curious, so I decided to facet wrap the next plot to view the sentiment for each call.
 
-```{r}
+```r
 ggplot(wwe2_sentiment, aes(x=category, y = meanSentiment)) +
   geom_bar(stat="identity") +
   facet_wrap(~date) +
@@ -276,7 +276,7 @@ dates_close.to_csv(path+'assignment1_dates_close.csv', index=False)
 
 After obtaining stock data, I decided to analyze the impact of a calls sentimnet on trading based on the days before and after the call. 
 
-```{r}
+```r
 # Reading stock prices in
 stock_prices <- read.csv("assignment1_dates_close.csv")
 stock_prices$date <- str_squish(stock_prices$date)
@@ -290,7 +290,7 @@ stock_sentiment$sentiment_positive_negative <- ifelse(stock_sentiment$meanSentim
 
 The graphs below a grouped by category, index, and a binary variable (sentiment_positive_negative) which takes a value of 1 when the call is positive and 0 when the call is negative. 
 
-```{r}
+```r
 group_sentiment <- stock_sentiment %>% 
   group_by(category, index, sentiment_positive_negative) %>% 
   summarise(Close_Mean_Pct = mean(Close_Pct_Change))
@@ -309,7 +309,7 @@ ggplot(group_sentiment2, aes(y = Close_Mean_Pct, x = index)) +
 
 <img src="Images/Mean_Price_Change_5_Days_Before_After_Call.png">
 
-```{r}
+```r
 group_sentiment %>% 
   filter(sentiment_positive_negative == 0) %>% 
   ggplot(., aes(y = Close_Mean_Pct, x = index)) + 
@@ -320,7 +320,7 @@ group_sentiment %>%
 
 <img src="Images/Negtaive_Sentiment.png">
 
-```{r}
+```r
 group_sentiment %>% 
   filter(sentiment_positive_negative == 1) %>% 
   ggplot(., aes(y = Close_Mean_Pct, x = index)) + 
@@ -339,7 +339,7 @@ A surprising trend appeared in the negative sentiment graph. When analysts were 
 
 First, I read the data into my global environment.
 
-```{r}
+```r
 raw_27_oct_16 <- read.csv("wwe_raw_27_Oct_16.csv", stringsAsFactors = FALSE)
 raw_28_jul_16 <- read.csv("wwe_raw_28_Jul_16.csv", stringsAsFactors = FALSE)
 ```
@@ -348,7 +348,7 @@ raw_28_jul_16 <- read.csv("wwe_raw_28_Jul_16.csv", stringsAsFactors = FALSE)
 
 Next, I created a people function that does the majority of formating so the columns are similar to the files in section bronze and silver.
 
-```{r}
+```r
 createPeople <- function(table, ticker, date, quarter) {
   table$Name = str_squish(table$Name)
   table$name = tolower(table$Name)
@@ -365,7 +365,7 @@ createPeople <- function(table, ticker, date, quarter) {
 
 After importing the data, I analyzed the transcript and deterimed parts that I needed to pull out to perform my analysis.
 
-```{r}
+```r
 executives <- data.frame(name = raw_27_oct_16[5:7,])
 executives <- separate(executives, name, c("Name", "title"), sep = "\\\x96", remove = TRUE)
 executives$organization = "	World Wrestling EntertainmentInc."
@@ -381,7 +381,7 @@ oct_27_16_people <- createPeople(oct_27_16_people, "WWE", "27-Oct-16", "Q3")
 
 The operator's information will be the same as before, so there is no need to create a new operator data frame. However, the executives and analysts might have changed, so I grabbed them from the transcript.
 
-```{r}
+```r
 executives_7_16 <- data.frame(name = raw_28_jul_16[5:7,])
 executives_7_16 <- separate(executives_7_16, name, c("Name", "title"), sep = "-", remove = TRUE)
 executives_7_16$organization = "	World Wrestling EntertainmentInc."
@@ -396,7 +396,7 @@ jul_16_people <- createPeople(jul_16_people, "WWE", "16-Jul-16", "Q2")
 
 I created a function that formats the table to be the same as the tables in bronze and silver. It matches the tables by indexing multiple times. I used an anti join to remove the text of the person's name before they begin to appear on the transcript. In addition, I merged text together if the speaker on the row was consecutive to the previous row.
 
-```{r}
+```r
 get <- function(table1, table2) {
   table1$info = str_squish(table1$info)
   table1$index = seq.int(nrow(table1))
@@ -421,7 +421,7 @@ get <- function(table1, table2) {
 
 I ran the function on October 27 2016.
 
-```{r}
+```r
 oct_27_16 <- data.frame(info = raw_27_oct_16[15:175,])
 oct_27_16_text <- get(oct_27_16, oct_27_16_people)
 ```
@@ -430,7 +430,7 @@ oct_27_16_text <- get(oct_27_16, oct_27_16_people)
 
 Next, I ran the function on July 16 2016
 
-```{r}
+```r
 jul_16_16 <- data.frame(info = raw_28_jul_16[15:137,])
 jul_16_16_text <- get(jul_16_16, jul_16_people)
 ```
@@ -439,7 +439,7 @@ jul_16_16_text <- get(jul_16_16, jul_16_people)
 
 After I unparsed the two transcripts, I decided to combine the two dates. After I did this, I added the column categories, the same way I did it in silver, and then took the sentiment of each text.
 
-```{r}
+```r
 text_combined <- rbind(oct_27_16_text, jul_16_16_text)
 text_combined <- mutate(text_combined, category = 
           ifelse(grepl(".*CEO.*", text_combined$title), "Exec",
@@ -490,7 +490,7 @@ gold_close.to_csv(path+'assignment1_gold_dates_close.csv', index=False)
 
 After getting the stock data, I combined the two transcripts and ran sentiment analysis. After this, I merged the table text_combined with stock_jul_oct_27.
 
-```{r}
+```r
 stock_jul_16_oct_27 <- read.csv("assignment1_gold_dates_close.csv", stringsAsFactors = FALSE)
 stock_jul_16_oct_27$date <- str_squish(stock_jul_16_oct_27$date)
 stock_jul_16_oct_27$original_date <- str_squish(stock_jul_16_oct_27$original_date)
@@ -503,7 +503,7 @@ stock_sentiment_jul_16_oct_27$sentiment_positive_negative <- ifelse(stock_sentim
 
 After I merge the tables, I then grouped the data, in the same manner, I did in part silver and plotted the results.
 
-```{r}
+```r
 all_stock <- rbind(stock_sentiment, stock_sentiment_jul_16_oct_27)
 all_stock_group_sentiment <- all_stock %>% 
   group_by(category, index, sentiment_positive_negative) %>% 
@@ -516,7 +516,7 @@ all_stock_group_sentiment2 <- all_stock %>%
 
 ### Visualizations:
 
-```{r}
+```r
 ggplot(all_stock_group_sentiment2, aes(y = Close_Mean_Pct, x = index)) + 
   geom_bar(position="dodge", stat="identity") +
   theme_classic() +
@@ -527,7 +527,7 @@ ggplot(all_stock_group_sentiment2, aes(y = Close_Mean_Pct, x = index)) +
 
 <img src="Images/Mean_Price_Change_5_Days_Before_After_Call_Additional_Info.png">
 
-```{r}
+```r
 all_stock_group_sentiment %>% 
   filter(sentiment_positive_negative == 0) %>% 
   ggplot(., aes(y = Close_Mean_Pct, x = index)) + 
@@ -541,7 +541,7 @@ all_stock_group_sentiment %>%
 
 <img src="Images/Negative_Sentiment_Additional_Info.png">
 
-```{r}
+```r
 all_stock_group_sentiment %>% 
   filter(sentiment_positive_negative == 1) %>% 
   ggplot(., aes(y = Close_Mean_Pct, x = index)) + 
