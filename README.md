@@ -43,7 +43,17 @@ After getting the data into my environment, I then created a plot to explore the
 
 ```r
 str(wwe)
+```
+
+<img src="Images/str_wwe.png">
+
+```r
 table(wwe$likelyRace)
+```
+
+<img src="Images/table_wwe_likley_race.png">
+
+```r
 ggplot(wwe, aes(x=likelyRace)) +
   geom_bar() + 
   theme_classic() +
@@ -166,12 +176,19 @@ wwe2_sentiment <- sentiment(get_sentences(wwe2),
   group_by(date, category) %>% 
   summarize(meanSentiment = mean(sentiment))
 wwe2_sentiment
+```
+
+<img src="Images/wwe2_sentiment.png">
+
+```r
 wwe2_category_sentiment <- sentiment(get_sentences(wwe2),
           polarity_dt = lexicon::hash_sentiment_loughran_mcdonald) %>% 
   group_by(category) %>% 
   summarize(meanSentiment = mean(sentiment))
 wwe2_category_sentiment
 ```
+
+<img src="Images/wwe2_category_sentiment.png">
 
 I elected to use Loughran and Mcdonald lexicon for sentiment analysis because it was made to analyze financial reports and earnings calls.
 
