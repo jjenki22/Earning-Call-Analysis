@@ -212,7 +212,7 @@ I used python because pandas are very good at handling dates. First, I interacte
 
 After getting the data, I cleaned the data frame and eliminated columns that were not necessary for my analysis. After doing this, I created a nested for loop to get the necessary dates. The first for loop runs through a list that contains the date of the earning call. The second for loop gets the five dates before the earnings call date, the earnings call date, and the date after the earnings call. After doing this, I merged the dates with the stock data.
 
-```{python, eval = FALSE}
+```python
 import pandas as pd
 import requests
 import numpy as np
