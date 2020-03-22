@@ -461,7 +461,7 @@ sentiment_jul_16_oct_27 <- sentiment(get_sentences(text_combined),
 
 I followed the same process I used above to obtain stock data in Python. 
 
-```{python, eval = FALSE}
+```python
 gold_data = {'date':['2016-07-16', '2016-10-27'], 
             'ticker': ['WWE', 'WWE']}
 dates_gold = pd.DataFrame(gold_data)
